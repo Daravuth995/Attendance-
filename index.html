@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Attendance</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Classroom Attendance</h1>
+    <form id="attendanceForm" action="https://formsubmit.co/register.member95@gmail.com" method="POST">
+      <p class="subtitle">Select attendance for each student:</p>
+
+      <div class="student-list">
+        <!-- Student entries -->
+        <script>
+          const students = [
+            "Sarita Yin", "Chanrachna Oum", "Sean Lavy", "Sroeun Sophea", "Ban Sophea",
+            "Kean Kimhour", "Biya", "Phat Khemcheat", "Yon Thavika", "Chut Cheata",
+            "Keng Bora", "Yin Vouchngin", "Vatana", "Channy", "Wat Domboukkpous",
+            "Kompheak", "Daly", "Vouch Neang", "Sorm Seyha", "Rom Sopheaktra",
+            "Punleu Chhon", "Venerable Oudom"
+          ];
+
+          document.addEventListener("DOMContentLoaded", () => {
+            const list = document.querySelector(".student-list");
+            students.forEach(name => {
+              const id = name.toLowerCase().replace(/\s+/g, '-');
+              list.innerHTML += `
+              <div class="student">
+                <label for="${id}">${name}</label>
+                <select name="${name}" id="${id}" required>
+                  <option value="">-</option>
+                  <option value="✅ Present">✅ Present</option>
+                  <option value="❌ Absent">❌ Absent</option>
+                </select>
+              </div>`;
+            });
+          });
+        </script>
+      </div>
+
+      <input type="hidden" name="_subject" value="Student Attendance Submitted" />
+      <input type="hidden" name="_captcha" value="false" />
+      <button type="submit" id="submitBtn">Submit Attendance</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -165,12 +165,20 @@
   background: radial-gradient(circle at 30% 30%, #fbc2eb, #a6c1ee);
 }
 
-.performer-card:nth-child(4) {
+.performer-card.green4 {
   background: radial-gradient(circle at 30% 30%, #d4fc79, #96e6a1);
 }
-
-.performer-card:nth-child(5) {
+.performer-card.blue5 {
   background: radial-gradient(circle at 30% 30%, #84fab0, #8fd3f4);
+}
+.performer-card.purple6 {
+  background: radial-gradient(circle at 30% 30%, #c471f5, #fa71cd);
+}
+.performer-card.orange7 {
+  background: radial-gradient(circle at 30% 30%, #f7971e, #ffd200);
+}
+.performer-card.pink8 {
+  background: radial-gradient(circle at 30% 30%, #fbc2eb, #a6c1ee);
 }
 
 .badge {
@@ -396,7 +404,7 @@
 
   <div class="sticky-leaderboard">
     <div class="leaderboard-header">
-      <h3>🏆 Top​ 5 Performers<br><span style="font-size: 0.9rem; color: #666;">សិស្សចូលរៀនទៀងទាត់​ & គោរពពេលវេលា</span></h3>
+      <h3>🏆 Top Performers<br><span style="font-size: 0.9rem; color: #666;">សិស្សចូលរៀនទៀងទាត់​ & គោរពពេលវេលា</span></h3>
       <small>This Month</small>
     </div>
     <div class="leaderboard-grid" id="leaderboard"></div>
@@ -489,11 +497,12 @@
         const res = await fetch(`${BASE_URL}?action=getTopPerformers`);
         const data = await res.json();
         
-        const list = data.map((p, i) => {
-          let cardClass = '';
-          if (i === 0) cardClass = 'gold';
-          else if (i === 1) cardClass = 'silver';
-          else if (i === 2) cardClass = 'bronze';
+        const list = data
+  .filter(p => typeof p.name === 'string' && p.name.trim() !== '' && Number(p.count) > 0)
+  .map((p, i) => {
+          const gradientClasses = ['gold', 'silver', 'bronze', 'green4', 'blue5', 'purple6', 'orange7', 'pink8'];
+let cardClass = gradientClasses[i] || '';
+
           
           return `
   <div class="performer-card ${cardClass}">

@@ -493,46 +493,36 @@
     }
 
     async function loadTopPerformers() {
-  try {
-    const res = await fetch(`${BASE_URL}?action=getTopPerformers`);
-    const data = await res.json();
+      try {
+        const res = await fetch(`${BASE_URL}?action=getTopPerformers`);
+        const data = await res.json();
+        
+        const list = data
+  .filter(p => typeof p.name === 'string' && p.name.trim() !== '' && Number(p.count) > 0)
+  .map((p, i) => {
+          const gradientClasses = ['gold', 'silver', 'bronze', 'green4', 'blue5', 'purple6', 'orange7', 'pink8'];
+let cardClass = gradientClasses[i] || '';
 
-    if (!data.success || !Array.isArray(data.topPerformers)) {
-  document.getElementById('leaderboard').innerHTML = `<div style="font-size: 0.8rem; color: #999;">No top performer data available.</div>`;
-  return;
-}
+          
+          return `
+  <div class="performer-card ${cardClass}">
+    <div class="badge">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
+    <div class="performer-rank">#${i + 1}</div>
+    <div class="performer-name">${p.name}</div>
+    <div class="performer-stats">
+      <span class="days">${p.count} days</span>
+      <span>${p.rewarded ? '✅ 10 pts' : '⏳ Pending'}</span>
+    </div>
+  </div>
+`;
 
-if (data.topPerformers.length === 0) {
-  document.getElementById('leaderboard').innerHTML = `<div style="font-size: 0.8rem; color: #999;">No top performer data this month.</div>`;
-  return;
-}
-
-
-
-    const list = data.topPerformers.map((p, i) => {
-      const gradientClasses = ['gold', 'silver', 'bronze', 'green4', 'blue5', 'purple6', 'orange7', 'pink8'];
-      const cardClass = gradientClasses[i] || '';
-      const rewardedText = p.rewarded ? '✅ 10 pts' : '⏳ Pending';
-
-      return `
-        <div class="performer-card ${cardClass}">
-          <div class="badge">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</div>
-          <div class="performer-rank">#${i + 1}</div>
-          <div class="performer-name">${p.name}</div>
-          <div class="performer-stats">
-            <span class="days">${p.daysPresent} days</span>
-            <span>${rewardedText}</span>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    document.getElementById('leaderboard').innerHTML = list;
-  } catch (error) {
-    console.error('Error loading leaderboard:', error);
-  }
-}
-
+        }).join('');
+        
+        document.getElementById('leaderboard').innerHTML = list;
+      } catch (error) {
+        console.error('Error loading leaderboard:', error);
+      }
+    }
 
     function showMessage(msg, type) {
       const box = document.getElementById('msgBox');
